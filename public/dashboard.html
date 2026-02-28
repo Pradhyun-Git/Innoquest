@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Innoquest</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>🎯 Innoquest</h1>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" onclick="switchTab('overview')">
+          <span class="icon">📊</span> Overview
+        </button>
+        <button class="nav-item" onclick="switchTab('tasks')">
+          <span class="icon">✅</span> Tasks
+        </button>
+        <button class="nav-item" onclick="switchTab('timetable')">
+          <span class="icon">📅</span> Timetable
+        </button>
+        <button class="nav-item" onclick="switchTab('chatbot')">
+          <span class="icon">🤖</span> AI Assistant
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn-secondary" onclick="logout()">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="dashboard-header">
+        <div class="header-title">
+          <h2 id="pageTitle">Dashboard</h2>
+        </div>
+        <div class="header-user">
+          <span id="userName">User</span>
+          <img src="https://via.placeholder.com/40" alt="Profile" class="profile-pic">
+        </div>
+      </header>
+
+      <!-- Tab Content -->
+      <div class="tab-content">
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-pane active">
+          <div class="overview-grid">
+            <div class="stat-card">
+              <div class="stat-icon">📋</div>
+              <div class="stat-info">
+                <h3>Total Tasks</h3>
+                <p id="totalTasks">0</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">✔️</div>
+              <div class="stat-info">
+                <h3>Completed</h3>
+                <p id="completedTasks">0</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">⏳</div>
+              <div class="stat-info">
+                <h3>In Progress</h3>
+                <p id="inProgressTasks">0</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">🎯</div>
+              <div class="stat-info">
+                <h3>Today's Tasks</h3>
+                <p id="todayTasks">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="overview-sections">
+            <div class="section">
+              <h3>Upcoming Tasks</h3>
+              <div id="upcomingTasksList" class="tasks-list">
+                <p class="empty-message">No upcoming tasks</p>
+              </div>
+            </div>
+            <div class="section">
+              <h3>Today's Schedule</h3>
+              <div id="todaySchedule" class="schedule-list">
+                <p class="empty-message">No events scheduled for today</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tasks Tab -->
+        <div id="tasks" class="tab-pane">
+          <div class="tasks-header">
+            <h3>My Tasks</h3>
+            <button class="btn-primary" onclick="openTaskModal()">+ New Task</button>
+          </div>
+
+          <div class="tasks-filters">
+            <button class="filter-btn active" onclick="filterTasks('all')">All</button>
+            <button class="filter-btn" onclick="filterTasks('today')">Today</button>
+            <button class="filter-btn" onclick="filterTasks('week')">This Week</button>
+            <button class="filter-btn" onclick="filterTasks('completed')">Completed</button>
+          </div>
+
+          <div id="tasksList" class="tasks-list">
+            <p class="empty-message">No tasks yet. Create your first task!</p>
+          </div>
+        </div>
+
+        <!-- Timetable Tab -->
+        <div id="timetable" class="tab-pane">
+          <div class="timetable-header">
+            <h3>Weekly Timetable</h3>
+            <button class="btn-primary" onclick="openEventModal()">+ New Event</button>
+          </div>
+
+          <div class="week-selector">
+            <button onclick="previousWeek()">← Previous</button>
+            <span id="weekLabel">Week of Feb 24 - Mar 2</span>
+            <button onclick="nextWeek()">Next →</button>
+          </div>
+
+          <div class="timetable-grid">
+            <div class="day-schedule">
+              <h4>Monday</h4>
+              <div id="schedule-monday" class="events-list"></div>
+            </div>
+            <div class="day-schedule">
+              <h4>Tuesday</h4>
+              <div id="schedule-tuesday" class="events-list"></div>
+            </div>
+            <div class="day-schedule">
+              <h4>Wednesday</h4>
+              <div id="schedule-wednesday" class="events-list"></div>
+            </div>
+            <div class="day-schedule">
+              <h4>Thursday</h4>
+              <div id="schedule-thursday" class="events-list"></div>
+            </div>
+            <div class="day-schedule">
+              <h4>Friday</h4>
+              <div id="schedule-friday" class="events-list"></div>
+            </div>
+            <div class="day-schedule">
+              <h4>Saturday</h4>
+              <div id="schedule-saturday" class="events-list"></div>
+            </div>
+            <div class="day-schedule">
+              <h4>Sunday</h4>
+              <div id="schedule-sunday" class="events-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chatbot Tab -->
+        <div id="chatbot" class="tab-pane">
+          <div class="chatbot-container">
+            <div class="chatbot-header">
+              <h3>🤖 AI Assistant</h3>
+              <p>Get help organizing your tasks and schedule</p>
+            </div>
+
+            <div id="chatMessages" class="chat-messages">
+              <div class="message bot-message">
+                <p>Hello! I'm your AI assistant. How can I help you with your tasks and schedule today?</p>
+              </div>
+            </div>
+
+            <div class="chatbot-suggestions">
+              <button class="suggestion-btn" onclick="sendChatMessage('Suggest tasks for me')">💡 Suggest tasks</button>
+              <button class="suggestion-btn" onclick="sendChatMessage('Optimize my schedule')">⚡ Optimize schedule</button>
+              <button class="suggestion-btn" onclick="sendChatMessage('Help me organize')">📚 Get tips</button>
+              <button class="suggestion-btn" onclick="sendChatMessage('Hello')">👋 Say hello</button>
+            </div>
+
+            <div class="chat-input-container">
+              <input 
+                type="text" 
+                id="chatInput" 
+                placeholder="Type your message..." 
+                onkeypress="handleChatKeypress(event)"
+              >
+              <button onclick="sendChat()" class="btn-primary">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Task Modal -->
+  <div id="taskModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeTaskModal()">&times;</span>
+      <h2>Create New Task</h2>
+      <form id="taskForm">
+        <input type="text" placeholder="Task Title" id="taskTitle" required>
+        <textarea placeholder="Description (optional)" id="taskDescription"></textarea>
+        <input type="date" id="taskDate" required>
+        <select id="taskPriority">
+          <option value="low">Low Priority</option>
+          <option value="medium" selected>Medium Priority</option>
+          <option value="high">High Priority</option>
+        </select>
+        <div class="modal-buttons">
+          <button type="submit" class="btn-primary">Create Task</button>
+          <button type="button" class="btn-secondary" onclick="closeTaskModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Event Modal -->
+  <div id="eventModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeEventModal()">&times;</span>
+      <h2>Create New Event</h2>
+      <form id="eventForm">
+        <input type="text" placeholder="Event Title" id="eventTitle" required>
+        <textarea placeholder="Description (optional)" id="eventDescription"></textarea>
+        <select id="eventDay" required>
+          <option value="">Select Day</option>
+          <option value="monday">Monday</option>
+          <option value="tuesday">Tuesday</option>
+          <option value="wednesday">Wednesday</option>
+          <option value="thursday">Thursday</option>
+          <option value="friday">Friday</option>
+          <option value="saturday">Saturday</option>
+          <option value="sunday">Sunday</option>
+        </select>
+        <input type="time" id="eventStartTime" required>
+        <input type="time" id="eventEndTime" required>
+        <div class="modal-buttons">
+          <button type="submit" class="btn-primary">Create Event</button>
+          <button type="button" class="btn-secondary" onclick="closeEventModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
